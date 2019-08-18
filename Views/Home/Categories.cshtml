@@ -1,0 +1,15 @@
+@model Association
+<h1><a href="/">Products</a> | <a href="/categories">Categories</a></h1>
+<h2>New Categories</h2>
+<form asp-action="NewCategories" asp-controller="Home" method="post">
+    <div class="form-group">
+        <span asp-validation-for="Categoria.Name"></span>
+        <label asp-for="Categoria.Name"> Categoria Name: </label>
+        <input asp-for="Categoria.Name" class="form-control" placeholder="new Name"><br>
+        <button type="submit" class="btn btn-primary">Add New</button>
+    </div>
+</form>
+<h3>Existing Categories: </h3>
+@foreach(Categoria c in @ViewBag.Categories){
+    <h5><a href="categories/@c.CategoriaId">@c.Name</a></h5>
+}

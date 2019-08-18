@@ -1,0 +1,18 @@
+@model DisplayProductView
+<h2>@Model.product.Name</h2>
+
+<h4>Categories:</h4>
+@foreach(Association ass in Model.product.Associations){
+    <p>@ass.Categoria.Name</p>
+}
+
+
+
+<h4>Add categories: </h4>
+<form asp-action="addAssociation" asp-route-id="@Model.product.ProductId" asp-controller="Home" method="post">
+    <select asp-for="@Model.CategoriaId">
+        @foreach(Categoria categor in Model.categorias){
+        <option value="@categor.CategoriaId">@categor.Name</option>}
+    </select>
+    <button type="submit" class="btn btn-primary">Add New</button>
+</form>

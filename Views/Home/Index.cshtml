@@ -1,0 +1,28 @@
+﻿@model Association
+<h1><a href="/">Products</a> | <a href="/categories">Categories</a></h1>
+<h2>New Product</h2>
+<form asp-action="AddNewProduct" asp-controller="Home" method="post">
+    <div class="form-group">
+        <div class="form-group">
+            <span asp-validation-for="Product.Name"></span>
+            <label asp-for="Product.Name"> Product Name: </label>
+            <input asp-for="Product.Name" class="form-control" placeholder="Product Name">
+        </div>
+        <div class="form-group">
+            <span asp-validation-for="Product.Price"></span>
+            <label for="Product.Price"> Price: </label>
+            <input asp-for="Product.Price" class="form-control" placeholder="Price">
+        </div>
+        <div class="form-group">
+            <label asp-for="Product.Description">Description:</label>
+            <textarea asp-for="Product.Description" class="form-control" placeholder="Description"> </textarea><br>
+            <button type="submit" class="btn btn-primary">Add New</button>
+        </div>
+    </div>
+</form>
+
+<h3>Existing Producst: </h3>
+
+@foreach(var p in @ViewBag.products){
+        <h5><a href="products/@p.ProductId">@p.Name</a></h5>
+    }
