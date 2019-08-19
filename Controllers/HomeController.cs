@@ -47,8 +47,17 @@ namespace ProductCategories.Controllers
 
         [HttpGet("categories/{id}")]
         public IActionResult DisplayCategories(int id){
-
-            return View("DisplayCategories");
+            DisplayCategoriaView viewModel = new DisplayCategoriaView();
+            viewModel.categoria = dbContext.categories
+            .Include(c=>c.Associations)
+            .ThenInclude(ass=>ass.Product)
+            .FirstOrDefault(p=>p.CategoriaId == id);
+            viewModel.products = dbContext.products
+            .Include(p=>p.Associations)
+            .ThenInclude(ass=>ass.Categoria)
+            .Where(prod=>!prod.Associations.Select(a=>a.CategoriaId).Contains(id))
+            .ToList();
+            return View("DisplayCategories", viewModel);
         }  
 
         [HttpPost("newproduct")]
@@ -64,13 +73,23 @@ namespace ProductCategories.Controllers
             return RedirectToAction ("Categories");
         }
         [HttpPost("addassosiation/{id}")]
-        public IActionResult addAssociation(DisplayProductView newAss, int id){
-            Association newass = new Association();
-            newass.ProductId = id;
-            newass.CategoriaId = newAss.CategoriaId;
-            dbContext.associations.Add(newass);
+        public IActionResult addAssociation(DisplayProductView newAssosuation, int id){
+            Association tempass = new Association();
+            tempass.ProductId = id;
+            tempass.CategoriaId = newAssosuation.CategoriaId;
+            dbContext.associations.Add(tempass);
             dbContext.SaveChanges();
             return RedirectToAction("DisplayProduct", new {id=id});
+        }
+
+        [HttpPost("addassociationcategoria/{id}")]
+        public IActionResult addAssociationCategoria (DisplayCategoriaView newAssosuation,int id){
+            Association tempcat = new Association();
+            tempcat.CategoriaId = id;
+            tempcat.ProductId = newAssosuation.ProductId;
+            dbContext.associations.Add(tempcat);
+            dbContext.SaveChanges();
+            return RedirectToAction("DisplayCategories", new{id=id});
         }
     }
 }

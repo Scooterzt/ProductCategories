@@ -1,7 +1,16 @@
-<h2>placeholder</h2>
+@model DisplayCategoriaView
+<h2>@Model.categoria.Name</h2>
 <h4>Product List:</h4>
-    <p>placeholder product!!!</p>
+@foreach(Association prod in Model.categoria.Associations){
+    <p> - @prod.Product.Name</p>
+}
+
 
 <h6>Add Product:</h6>
->>>>>> List <br>
-<button type="submit" class="btn btn-primary">Add New</button>
+<form asp-action="addAssociationCategoria" asp-route-id="@Model.categoria.CategoriaId" asp-controller="Home" method="post">
+    <select asp-for="@Model.ProductId">
+        @foreach(Product prod in Model.products){
+        <option value="@prod.ProductId">@prod.Name</option>}
+    </select>
+    <button type="submit" class="btn btn-primary">Add New</button>
+</form>
